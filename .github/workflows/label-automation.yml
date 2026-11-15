@@ -50,9 +50,9 @@ jobs:
               { name: "area: data", color: "C2E0C6", description: "데이터 및 저장소" },
               { name: "area: vehicle", color: "BFDADC", description: "차량 SDK 연동" },
               { name: "area: docs", color: "C5DEF5", description: "프로젝트 문서" },
-              { name: "member: 우재 🐶", color: "FBCA04", description: "담당자: 우재" },
-              { name: "member: 예찬 🦊", color: "FAD8C7", description: "담당자: 예찬" },
-              { name: "member: 현영 🐱", color: "B60205", description: "담당자: 현영" },
+              { name: "우재 🐶", color: "FBCA04", description: "담당자: 우재" },
+              { name: "예찬 🦊", color: "FAD8C7", description: "담당자: 예찬" },
+              { name: "현영 🐱", color: "B7E4C7", description: "담당자: 현영" },
             ];
 
             for (const label of labelCatalog) {
@@ -79,9 +79,7 @@ jobs:
             const areaLabels = labelCatalog
               .map((label) => label.name)
               .filter((name) => name.startsWith("area: "));
-            const memberLabels = labelCatalog
-              .map((label) => label.name)
-              .filter((name) => name.startsWith("member: "));
+            const memberLabels = ["우재 🐶", "예찬 🦊", "현영 🐱"];
             const typeByKey = {
               init: "type: init",
               feat: "type: feat",
@@ -92,9 +90,9 @@ jobs:
               ci: "type: ci",
             };
             const memberByLogin = {
-              juwoojae: "member: 우재 🐶",
-              metjyc: "member: 예찬 🦊",
-              hycho04: "member: 현영 🐱",
+              juwoojae: "우재 🐶",
+              metjyc: "예찬 🦊",
+              hycho04: "현영 🐱",
             };
 
             const item = context.payload.issue ?? context.payload.pull_request;
