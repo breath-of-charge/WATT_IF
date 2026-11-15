@@ -1,4 +1,4 @@
-package com.breathofcharge.wattif.ui
+package com.breathofcharge.wattif.ui.main
 
 import com.breathofcharge.wattif.domain.model.ActiveCampingSession
 import com.breathofcharge.wattif.domain.repository.CampingSessionRepository

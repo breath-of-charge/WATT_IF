@@ -1,8 +1,9 @@
-package com.breathofcharge.wattif.data.local
+package com.breathofcharge.wattif.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
+import com.breathofcharge.wattif.data.local.entity.CampingSessionEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
