@@ -12,23 +12,25 @@ import org.junit.Test
 
 class MainViewModelTest {
     @Test
-    fun activeSessionIsExposedAsReadyState() = runTest {
-        val expected = ActiveCampingSession(
-            id = 1,
-            name = "한강 노을 캠핑",
-            status = "ACTIVE",
-            startedAtEpochMillis = 1_000,
-            startBatteryPercent = 82,
-            destinationName = "서울 성수동",
-            reserveBatteryPercent = 30,
-            activePresetName = "취침 모드",
-        )
-        val viewModel = MainViewModel(FakeRepository(flowOf(expected)))
+    fun activeSessionIsExposedAsReadyState() =
+        runTest {
+            val expected =
+                ActiveCampingSession(
+                    id = 1,
+                    name = "한강 노을 캠핑",
+                    status = "ACTIVE",
+                    startedAtEpochMillis = 1_000,
+                    startBatteryPercent = 82,
+                    destinationName = "서울 성수동",
+                    reserveBatteryPercent = 30,
+                    activePresetName = "취침 모드",
+                )
+            val viewModel = MainViewModel(FakeRepository(flowOf(expected)))
 
-        val state = viewModel.uiState.filterIsInstance<MainUiState.Ready>().first()
+            val state = viewModel.uiState.filterIsInstance<MainUiState.Ready>().first()
 
-        assertEquals(expected, state.activeSession)
-    }
+            assertEquals(expected, state.activeSession)
+        }
 
     private class FakeRepository(
         private val sessions: Flow<ActiveCampingSession?>,

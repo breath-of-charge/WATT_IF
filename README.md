@@ -82,3 +82,8 @@ Vehicle SDK와 NaviHelper SDK는 Pleos 개발자 콘솔에서 앱 프로젝트�
 
 - [Pleos Connect 개발 환경 설정](https://document.pleos.ai/docs/connect/guide/getting-started/application-development/setup-connect-sdk-emulator)
 - [Pleos 프로젝트 및 SDK 안내](https://document.pleos.ai/docs/pleos-only/create-my-project)
+
+## 개발 문서
+
+- [개발 및 협업 컨벤션](CONVENTION.md)
+- [Pleos 차량용 앱 개발 가이드](PLEOS_GUIDE.md)
