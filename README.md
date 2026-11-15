@@ -1,27 +1,21 @@
 # WATT IF
 
-현대자동차그룹 차량용 앱 개발 공모전을 위한 Pleos Connect 기반 차박·캠핑 관리 앱입니다.
+**팀명:** 충전의 호흡
 
-현재 저장소는 **기능 구현 전 초기 환경**입니다. Kotlin과 Jetpack Compose로 실행 가능한 최소 앱을 구성했고, 기획서에 명시된 Room(SQLite), Vehicle SDK, NaviHelper SDK 연동 지점은 [초기 아키텍처](docs/ARCHITECTURE.md)에 정리했습니다.
+**한 줄 소개:** 차량 사용자의 캠핑·차박 준비부터 배터리 관리와 종료 점검까지 지원하는 Pleos Connect 기반 차량용 앱입니다.
 
-## 개발 기준
+## 제출 버전 안내
 
-- Kotlin 2.2.21
-- Jetpack Compose + Material 3
-- Android Gradle Plugin 8.13.2 / Gradle 8.13
-- Java 17
-- minSdk 28 / compileSdk 34 / targetSdk 34
-- Room 2.6.1 + KSP (SQLite 영속성 계층; 스키마와 DAO는 기능 구현 단계에서 추가)
+현재 저장소는 공모전 1차 제출을 위한 실행 가능한 초기 프로토타입입니다. Kotlin과 Jetpack Compose 기반 앱 실행 환경 및 Room(SQLite) 영속성 의존성을 구성했으며, Vehicle SDK와 NaviHelper SDK의 실제 차량 연동 및 캠핑 기능은 구현 예정 범위입니다.
 
-## 처음 실행하기
+## 실행 방법
 
-1. Android Studio에서 이 폴더를 엽니다.
-2. JDK는 Android Studio 내장 JDK 17 이상을 선택합니다.
-3. SDK Manager에서 Android SDK Platform 34와 Build Tools 34.0.0을 설치합니다.
-4. Gradle Sync 후 `app` 실행 구성을 선택합니다.
-5. Pleos Connect Emulator API 34 시스템 이미지에서 실행합니다.
+1. Android Studio에서 저장소 루트 폴더를 엽니다.
+2. JDK 17 이상과 Android SDK Platform 34를 설정합니다.
+3. Gradle Sync를 실행합니다.
+4. Android API 34 에뮬레이터 또는 Pleos Connect Emulator에서 `app` 실행 구성을 실행합니다.
 
-명령줄 빌드:
+명령줄 디버그 빌드:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
@@ -33,7 +27,54 @@
 .\gradlew.bat :app:testDebugUnitTest
 ```
 
-디버그 APK는 `app/build/outputs/apk/debug/app-debug.apk`에 생성됩니다.
+Release 빌드 변형 생성:
+
+```powershell
+.\gradlew.bat :app:assembleRelease
+```
+
+## 테스트 환경 및 설정
+
+- 운영체제: Windows 11
+- Java: Microsoft OpenJDK 17
+- Kotlin: 2.2.21
+- Android Gradle Plugin: 8.13.2
+- Gradle: 8.13
+- Android SDK: minSdk 28 / compileSdk 34 / targetSdk 34
+- UI: Jetpack Compose + Material 3
+- 로컬 저장: Room 2.6.1 + KSP
+- 빌드 검증: Debug·Release APK 생성 및 단위 테스트
+
+## Pleos Connect 대상 환경
+
+- Pleos Connect Emulator: 2.1.0
+- System Image: Pleos Connect v2.1.0 APIs / Android API 34
+- 화면 규격: Pleos Connect v2.1.0 Automotive 기본 가로형 디바이스 프로필(Compose 반응형 레이아웃)
+- 권장 설정: Cold boot / RAM 4 GB
+
+> 현재 제출 버전은 Android 빌드와 APK 서명·검증을 완료한 초기 프로토타입이며, Pleos Connect SDK를 통한 실제 차량 데이터·제어 기능은 구현 범위에 포함되지 않습니다.
+
+## 제출 APK
+
+- 파일 위치: `apk/충전의 호흡_WATT_IF_release.apk`
+- 빌드 유형: Release
+- 버전: 0.1.0 (`versionCode` 1)
+- 설치 확인:
+
+```powershell
+adb install -r "apk\충전의 호흡_WATT_IF_release.apk"
+```
+
+## 계획된 주요 기능
+
+- 캠핑 환경 프리셋
+- 목적지 기반 배터리 예산 관리
+- 배터리 보호 알림 및 지원 차량의 프리셋 자동 해제
+- 캠핑 진행 상태 복원
+- 캠핑 종료 및 출발 전 점검
+- Room 기반 캠핑 기록과 사용자 통계
+
+세부 데이터 흐름과 구현 경계는 [초기 아키텍처](docs/ARCHITECTURE.md)를 참고해 주세요.
 
 ## Pleos SDK 적용 전 확인
 
