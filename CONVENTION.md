@@ -123,7 +123,7 @@ app/src/main/java/com/breathofcharge/wattif/
 - `fix/15-battery-calculation`
 - `ci/20-android-ci`
 
-Issue 템플릿의 `브랜치 기능명`을 영문 kebab-case로 작성하고 담당자를 지정하면 작업 브랜치를 자동 생성한다. 저장소 구성원이 작성한 Issue만 처리하며, 같은 이름의 브랜치가 있으면 다시 만들지 않는다.
+Issue Form의 `브랜치 기능명`을 영문 kebab-case로 작성하고 담당자를 지정하면 작업 브랜치를 자동 생성한다. 등록된 팀 계정이 작성한 Issue만 처리하며, 같은 이름의 브랜치가 있으면 다시 만들지 않는다.
 
 ## 커밋 컨벤션
 
