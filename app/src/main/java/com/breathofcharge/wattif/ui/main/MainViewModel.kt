@@ -1,13 +1,10 @@
-package com.breathofcharge.wattif.ui
+package com.breathofcharge.wattif.ui.main
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.breathofcharge.wattif.data.local.WattIfDatabase
-import com.breathofcharge.wattif.data.repository.RoomCampingSessionRepository
 import com.breathofcharge.wattif.domain.repository.CampingSessionRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
@@ -30,12 +27,9 @@ class MainViewModel(
             )
 
     companion object {
-        fun factory(context: Context): ViewModelProvider.Factory =
+        fun factory(repository: CampingSessionRepository): ViewModelProvider.Factory =
             viewModelFactory {
-                initializer {
-                    val dao = WattIfDatabase.getInstance(context).campingSessionDao()
-                    MainViewModel(RoomCampingSessionRepository(dao))
-                }
+                initializer { MainViewModel(repository) }
             }
     }
 }

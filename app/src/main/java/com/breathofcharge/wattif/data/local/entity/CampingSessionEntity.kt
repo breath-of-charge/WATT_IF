@@ -1,4 +1,4 @@
-package com.breathofcharge.wattif.data.local
+package com.breathofcharge.wattif.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

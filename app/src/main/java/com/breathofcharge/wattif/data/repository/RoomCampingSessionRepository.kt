@@ -1,6 +1,6 @@
 package com.breathofcharge.wattif.data.repository
 
-import com.breathofcharge.wattif.data.local.CampingSessionDao
+import com.breathofcharge.wattif.data.local.dao.CampingSessionDao
 import com.breathofcharge.wattif.domain.model.ActiveCampingSession
 import com.breathofcharge.wattif.domain.repository.CampingSessionRepository
 import kotlinx.coroutines.flow.Flow
