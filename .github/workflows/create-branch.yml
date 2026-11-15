@@ -74,12 +74,21 @@ jobs:
 
             const branchName = `${type}/${issue.number}-${slug}`;
             const marker = `<!-- auto-branch:${branchName} -->`;
+            const checkoutInstructions = [
+              "",
+              "로컬에서 아래 명령어를 복사해 실행해 주세요.",
+              "",
+              "```bash",
+              "git fetch origin",
+              `git checkout ${branchName}`,
+              "```",
+            ].join("\n");
 
             try {
               await github.rest.git.getRef({ owner, repo, ref: `heads/${branchName}` });
               await commentOnce(
                 marker,
-                `이미 작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})가 존재합니다.`,
+                `이미 작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})가 존재합니다.${checkoutInstructions}`,
               );
               return;
             } catch (error) {
@@ -104,5 +113,5 @@ jobs:
 
             await commentOnce(
               marker,
-              `작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})를 \`main\` 기준으로 생성하고 이 Issue에 연결했습니다.`,
+              `작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})를 \`main\` 기준으로 생성하고 이 Issue에 연결했습니다.${checkoutInstructions}`,
             );
