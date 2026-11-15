@@ -153,5 +153,5 @@ app/src/main/java/com/breathofcharge/wattif/
 - Issue 제목의 `[Type]` 접두사로 Type 라벨을 자동 지정한다.
 - PR은 브랜치 접두사로 Type 라벨, 변경 파일 경로로 Area 라벨을 자동 지정한다.
 - 한 작업이 여러 영역을 변경하면 Area 라벨을 여러 개 지정할 수 있다.
-- Member 라벨은 실제 담당자가 직접 선택한다.
-- 자동 관리 라벨이 변경되면 다음 Issue 편집 또는 PR 업데이트 때 기존 Type·Area 라벨을 정리한다.
+- Member 라벨은 Issue 또는 PR 작성자의 GitHub 계정을 기준으로 자동 지정한다.
+- 자동 관리 라벨이 변경되면 다음 Issue 편집 또는 PR 업데이트 때 기존 Type·Area·Member 라벨을 정리한다.

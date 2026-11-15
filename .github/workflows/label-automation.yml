@@ -79,6 +79,9 @@ jobs:
             const areaLabels = labelCatalog
               .map((label) => label.name)
               .filter((name) => name.startsWith("area: "));
+            const memberLabels = labelCatalog
+              .map((label) => label.name)
+              .filter((name) => name.startsWith("member: "));
             const typeByKey = {
               init: "type: init",
               feat: "type: feat",
@@ -88,12 +91,19 @@ jobs:
               docs: "type: docs",
               ci: "type: ci",
             };
+            const memberByLogin = {
+              juwoojae: "member: 우재 🐶",
+              metjyc: "member: 예찬 🦊",
+              hycho04: "member: 현영 🐱",
+            };
 
             const item = context.payload.issue ?? context.payload.pull_request;
             const issue_number = item.number;
             const currentLabels = new Set(item.labels.map((label) => label.name));
-            const labelsToRemove = new Set(typeLabels);
+            const labelsToRemove = new Set([...typeLabels, ...memberLabels]);
             const labelsToAdd = new Set();
+            const memberLabel = memberByLogin[item.user.login];
+            if (memberLabel) labelsToAdd.add(memberLabel);
 
             if (context.payload.issue) {
               const titleType = item.title.match(/^\[(Init|Feat|Fix|Refactor|Chore|Docs|CI)]/i);
