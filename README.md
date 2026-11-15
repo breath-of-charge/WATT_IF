@@ -6,7 +6,7 @@
 
 ## 제출 버전 안내
 
-현재 저장소는 공모전 1차 제출을 위한 실행 가능한 초기 프로토타입입니다. Kotlin과 Jetpack Compose 기반 앱 실행 환경 및 Room(SQLite) 영속성 의존성을 구성했으며, Vehicle SDK와 NaviHelper SDK의 실제 차량 연동 및 캠핑 기능은 구현 예정 범위입니다.
+현재 저장소는 공모전 1차 제출을 위한 실행 가능한 초기 프로토타입입니다. Kotlin과 Jetpack Compose 기반 앱 실행 환경, Room(SQLite) 활성 캠핑 스키마, Flow·StateFlow 기반 비동기 상태 관리를 구성했으며, Vehicle SDK와 NaviHelper SDK의 실제 차량 연동 및 캠핑 기능은 구현 예정 범위입니다.
 
 ## 실행 방법
 
@@ -42,7 +42,7 @@ Release 빌드 변형 생성:
 - Gradle: 8.13
 - Android SDK: minSdk 28 / compileSdk 34 / targetSdk 34
 - UI: Jetpack Compose + Material 3
-- 로컬 저장: Room 2.6.1 + KSP
+- 로컬 저장: Room 2.8.5 + KSP
 - 빌드 검증: Debug·Release APK 생성 및 단위 테스트
 
 ## Pleos Connect 대상 환경

@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">WATT IF</string>
-    <string name="init_complete">Pleos Connect 프로젝트 초기 환경 구성 완료</string>
+    <string name="no_active_camping">현재 진행 중인 캠핑이 없습니다.</string>
 </resources>

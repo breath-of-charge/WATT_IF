@@ -1,0 +1,78 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "5edd14e3790b469517b6f94eefaff80a",
+    "entities": [
+      {
+        "tableName": "camping_sessions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `status` TEXT NOT NULL, `startedAtEpochMillis` INTEGER NOT NULL, `startBatteryPercent` INTEGER, `destinationName` TEXT, `reserveBatteryPercent` INTEGER, `activePresetName` TEXT, `endedAtEpochMillis` INTEGER, `endBatteryPercent` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startedAtEpochMillis",
+            "columnName": "startedAtEpochMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "startBatteryPercent",
+            "columnName": "startBatteryPercent",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "destinationName",
+            "columnName": "destinationName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "reserveBatteryPercent",
+            "columnName": "reserveBatteryPercent",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "activePresetName",
+            "columnName": "activePresetName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "endedAtEpochMillis",
+            "columnName": "endedAtEpochMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "endBatteryPercent",
+            "columnName": "endBatteryPercent",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5edd14e3790b469517b6f94eefaff80a')"
+    ]
+  }
+}
