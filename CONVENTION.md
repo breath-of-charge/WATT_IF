@@ -147,3 +147,11 @@ app/src/main/java/com/breathofcharge/wattif/
 - Kotlin, Compose, Room 품질과 중복 코드 및 개선 제안을 검토한다.
 - 의견은 타당하고 필요한 부분만 반영한다.
 - CodeRabbit 승인은 병합 조건이 아니며 팀원 리뷰 승인 규칙도 두지 않는다.
+
+## 라벨 운영
+
+- Issue 제목의 `[Type]` 접두사로 Type 라벨을 자동 지정한다.
+- PR은 브랜치 접두사로 Type 라벨, 변경 파일 경로로 Area 라벨을 자동 지정한다.
+- 한 작업이 여러 영역을 변경하면 Area 라벨을 여러 개 지정할 수 있다.
+- Member 라벨은 실제 담당자가 직접 선택한다.
+- 자동 관리 라벨이 변경되면 다음 Issue 편집 또는 PR 업데이트 때 기존 Type·Area 라벨을 정리한다.
