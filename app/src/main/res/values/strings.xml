@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WATT IF</string>
+    <string name="init_complete">Pleos Connect 프로젝트 초기 환경 구성 완료</string>
+</resources>
