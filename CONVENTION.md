@@ -116,12 +116,14 @@ app/src/main/java/com/breathofcharge/wattif/
 | `ci/` | 자동화 |
 | `docs/` | 문서 |
 
-브랜치는 최신 `dev`에서 분기하고 PR로 `dev`에 병합한다. 이름은 `type/이슈번호-기능명` 형식이며 기능명은 kebab-case를 사용한다.
+브랜치는 최신 `dev`에서 분기하고 PR로 `dev`에 병합한다. `dev`를 운영하지 않는 기간에는 `main`을 기준으로 사용한다. 이름은 `type/이슈번호-기능명` 형식이며 기능명은 kebab-case를 사용한다.
 
 - `init/1-project-setup`
 - `feat/12-battery-screen`
 - `fix/15-battery-calculation`
 - `ci/20-android-ci`
+
+Issue 템플릿의 `브랜치 기능명`을 영문 kebab-case로 작성하고 담당자를 지정하면 작업 브랜치를 자동 생성한다. 저장소 구성원이 작성한 Issue만 처리하며, 같은 이름의 브랜치가 있으면 다시 만들지 않는다.
 
 ## 커밋 컨벤션
 

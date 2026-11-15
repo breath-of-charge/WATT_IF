@@ -1,0 +1,106 @@
+name: Create branch from issue
+
+on:
+  issues:
+    types:
+      - assigned
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  create-branch:
+    name: Create and link issue branch
+    if: contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.issue.author_association)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Create branch from main
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue = context.payload.issue;
+            const allowedTypes = ["init", "feat", "fix", "refactor", "chore", "docs", "ci"];
+            const typeMatch = issue.title.match(/^\[([a-z]+)]/i);
+            const type = typeMatch?.[1].toLowerCase();
+
+            const commentOnce = async (marker, message) => {
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number: issue.number,
+                per_page: 100,
+              });
+              if (comments.some((comment) => comment.body?.includes(marker))) return;
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issue.number,
+                body: `${marker}\n${message}`,
+              });
+            };
+
+            if (!allowedTypes.includes(type)) {
+              const marker = "<!-- auto-branch:invalid-type -->";
+              await commentOnce(
+                marker,
+                "브랜치를 만들 수 없습니다. Issue 제목을 `[Feat]`, `[Fix]`, `[Chore]` 등의 형식으로 작성해 주세요.",
+              );
+              core.setFailed("Issue title does not contain a supported type.");
+              return;
+            }
+
+            const lines = (issue.body ?? "").split(/\r?\n/);
+            const headingIndex = lines.findIndex((line) => line.trim() === "## 🌿 브랜치 기능명");
+            const slug = lines
+              .slice(headingIndex + 1)
+              .map((line) => line.trim())
+              .find((line) => line && !line.startsWith("<!--") && !line.startsWith("##"))
+              ?.replace(/^`|`$/g, "");
+
+            if (headingIndex < 0 || !slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+              const marker = "<!-- auto-branch:invalid-slug -->";
+              await commentOnce(
+                marker,
+                "브랜치를 만들 수 없습니다. `브랜치 기능명`에 이슈 번호를 제외한 영문 kebab-case 값을 입력한 뒤 담당자를 다시 지정해 주세요. 예: `battery-screen`",
+              );
+              core.setFailed("Issue body does not contain a valid branch slug.");
+              return;
+            }
+
+            const branchName = `${type}/${issue.number}-${slug}`;
+            const marker = `<!-- auto-branch:${branchName} -->`;
+
+            try {
+              await github.rest.git.getRef({ owner, repo, ref: `heads/${branchName}` });
+              await commentOnce(
+                marker,
+                `이미 작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})가 존재합니다.`,
+              );
+              return;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            const base = await github.rest.git.getRef({ owner, repo, ref: "heads/main" });
+            await github.graphql(
+              `mutation CreateLinkedBranch($issueId: ID!, $name: String!, $oid: GitObjectID!) {
+                createLinkedBranch(input: { issueId: $issueId, name: $name, oid: $oid }) {
+                  issue {
+                    number
+                  }
+                }
+              }`,
+              {
+                issueId: issue.node_id,
+                name: branchName,
+                oid: base.data.object.sha,
+              },
+            );
+
+            await commentOnce(
+              marker,
+              `작업 브랜치 [\`${branchName}\`](https://github.com/${owner}/${repo}/tree/${branchName})를 \`main\` 기준으로 생성하고 이 Issue에 연결했습니다.`,
+            );
