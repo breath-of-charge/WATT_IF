@@ -19,11 +19,13 @@ abstract class WattIfDatabase : RoomDatabase() {
 
         fun getInstance(context: Context): WattIfDatabase =
             instance ?: synchronized(this) {
-                instance ?: Room.databaseBuilder(
-                    context.applicationContext,
-                    WattIfDatabase::class.java,
-                    "watt_if.db",
-                ).build().also { instance = it }
+                instance ?: Room
+                    .databaseBuilder(
+                        context.applicationContext,
+                        WattIfDatabase::class.java,
+                        "watt_if.db",
+                    ).build()
+                    .also { instance = it }
             }
     }
 }

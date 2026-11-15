@@ -17,23 +17,25 @@ import kotlinx.coroutines.flow.stateIn
 class MainViewModel(
     repository: CampingSessionRepository,
 ) : ViewModel() {
-    val uiState = repository.observeActiveSession()
-        .map { session -> MainUiState.Ready(activeSession = session) as MainUiState }
-        .catch { error ->
-            emit(MainUiState.Error(error.message ?: "캠핑 상태를 불러오지 못했습니다."))
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
-            initialValue = MainUiState.Loading,
-        )
+    val uiState =
+        repository
+            .observeActiveSession()
+            .map { session -> MainUiState.Ready(activeSession = session) as MainUiState }
+            .catch { error ->
+                emit(MainUiState.Error(error.message ?: "캠핑 상태를 불러오지 못했습니다."))
+            }.stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
+                initialValue = MainUiState.Loading,
+            )
 
     companion object {
-        fun factory(context: Context): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val dao = WattIfDatabase.getInstance(context).campingSessionDao()
-                MainViewModel(RoomCampingSessionRepository(dao))
+        fun factory(context: Context): ViewModelProvider.Factory =
+            viewModelFactory {
+                initializer {
+                    val dao = WattIfDatabase.getInstance(context).campingSessionDao()
+                    MainViewModel(RoomCampingSessionRepository(dao))
+                }
             }
-        }
     }
 }

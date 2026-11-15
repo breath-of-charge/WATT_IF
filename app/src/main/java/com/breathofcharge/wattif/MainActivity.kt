@@ -45,9 +45,10 @@ fun WattIfApp() {
     WattIfTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(32.dp),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
@@ -66,16 +67,19 @@ private fun AppContent(uiState: MainUiState) {
 
     when (uiState) {
         MainUiState.Loading -> CircularProgressIndicator(modifier = Modifier.padding(top = 16.dp))
-        is MainUiState.Ready -> Text(
-            text = uiState.activeSession?.let { "진행 중: ${it.name}" }
-                ?: stringResource(R.string.no_active_camping),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        is MainUiState.Error -> Text(
-            text = uiState.message,
-            color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyLarge,
-        )
+        is MainUiState.Ready ->
+            Text(
+                text =
+                    uiState.activeSession?.let { "진행 중: ${it.name}" }
+                        ?: stringResource(R.string.no_active_camping),
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        is MainUiState.Error ->
+            Text(
+                text = uiState.message,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyLarge,
+            )
     }
 }
 
