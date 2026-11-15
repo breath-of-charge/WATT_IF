@@ -48,10 +48,9 @@ reviews:
 
     ignore_title_keywords:
       - "WIP"
-      # 기본 브랜치(main) 외에 자동 리뷰할 PR 대상 브랜치
-    base_branches:
-      - "dev"
-
+  # main 브랜치를 대상으로 하는 PR 자동 리뷰
+  base_branches:
+    - "main"
 
   # 실제 코드만 리뷰
   path_filters:
