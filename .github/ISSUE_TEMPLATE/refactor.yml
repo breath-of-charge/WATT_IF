@@ -1,0 +1,36 @@
+name: ♻️ Refactor
+description: 기능 변경 없는 코드 구조 개선 작업을 등록합니다.
+title: "[Refactor] "
+labels: []
+body:
+  - type: textarea
+    id: work
+    attributes:
+      label: ♻️ 리팩토링 내용
+      description: 개선할 구조와 작업 목적을 설명해 주세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: 📌 세부 작업
+      description: 수행할 작업을 체크리스트로 작성해 주세요.
+      placeholder: "- [ ] "
+    validations:
+      required: true
+
+  - type: input
+    id: branch_name
+    attributes:
+      label: 🌿 브랜치 기능명
+      description: 이슈 번호를 제외하고 영문 소문자, 숫자, 하이픈(-)으로 작성해 주세요.
+      placeholder: project-package-structure
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 🔗 참고 자료
+      description: 관련 코드나 문서가 있다면 첨부해 주세요.
