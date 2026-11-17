@@ -12,7 +12,7 @@
 | 구조 | 단일 모듈, MVVM + Repository | 복잡하거나 재사용되는 계산만 domain으로 분리 |
 | 로컬 데이터 | Room 2.8.5, SQLite, KSP, Flow | Entity·DAO·Repository 역할 분리 |
 | 비동기 | Kotlin Coroutines, Flow·StateFlow | 생명주기를 고려해 수집 |
-| 품질 | ktlint, Android Lint, GitHub Actions | CodeRabbit은 GitHub App으로 별도 연결 |
+| 품질 | ktlint, Android Lint, Konsist, GitHub Actions | CodeRabbit은 GitHub App으로 별도 연결 |
 | 차량·내비게이션 | 아직 연동되지 않음 | Pleos Vehicle SDK, NaviHelper SDK 연동 예정 |
 
 별도 백엔드 서버 없이 Android 앱 내부에서 UI, 비즈니스 로직과 로컬 데이터베이스를 관리한다. SDK 의존성이나 차량 권한은 실제 사용 범위가 확정될 때 추가한다.
@@ -34,6 +34,7 @@ Room DB / Vehicle SDK
 - 복잡하거나 재사용되는 계산은 `domain`으로 분리하고 UseCase는 필요할 때만 만든다.
 - SDK 연동 전에는 출처가 명확한 Mock 데이터를 사용하며, 실제 데이터와 혼동되지 않게 표시한다.
 - 차량 SDK 접근과 오류 처리는 UI에서 분리한다.
+- 패키지 배치와 계층 의존성은 Konsist 테스트로 검증하며 Pull Request CI에서 필수 실행한다.
 
 ## Kotlin 네이밍과 작성 규칙
 
