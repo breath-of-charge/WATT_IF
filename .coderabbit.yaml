@@ -51,18 +51,25 @@ reviews:
   # main 브랜치를 대상으로 하는 PR 자동 리뷰
   base_branches:
     - "main"
-
-  # 실제 코드만 리뷰
+    
+  # 실제 코드와 변경된 설정·문서만 리뷰
   path_filters:
-    - "src/**"
+    # Android 앱 코드
+    - "app/src/**"
+
+    # 빌드 설정과 CI 워크플로
+    - "app/build.gradle.kts"
+    - "gradle/**"
+    - ".github/workflows/**"
+
+    # 아키텍처 및 개발 컨벤션 문서
+    - "CONVENTION.md"
+    - "docs/**"
 
     # 빌드/캐시/외부 라이브러리 제외
-    - "!build/**"
-    - "!.gradle/**"
+    - "!**/build/**"
+    - "!**/.gradle/**"
     - "!node_modules/**"
-
-    # 문서 파일 제외 (토큰 절약)
-    - "!*.md"
 
 chat:
   auto_reply: true
