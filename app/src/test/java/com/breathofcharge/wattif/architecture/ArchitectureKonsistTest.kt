@@ -9,6 +9,7 @@ import org.junit.Test
 
 class ArchitectureKonsistTest {
     private val basePackage = "com.breathofcharge.wattif"
+    private val forbiddenUiDependencies = listOf("$basePackage.data.")
     private val productionScope = Konsist.scopeFromProduction()
 
     @Test
@@ -31,7 +32,13 @@ class ArchitectureKonsistTest {
         productionScope.files
             .filter { it.hasPackage("$basePackage.ui..") }
             .assertTrue { file ->
-                file.imports.none { it.name.startsWith("$basePackage.data.") }
+                file.imports.none { import ->
+                    forbiddenUiDependencies.any(import.name::startsWith)
+                } &&
+                    file.text
+                        .lineSequence()
+                        .filterNot { it.trimStart().startsWith("import ") || it.trimStart().startsWith("package ") }
+                        .none { line -> forbiddenUiDependencies.any(line::contains) }
             }
 
         productionScope.files
@@ -55,7 +62,7 @@ class ArchitectureKonsistTest {
         productionScope.files
             .filterNot {
                 it.hasPackage("$basePackage.data..") ||
-                    it.hasPackage(basePackage)
+                    it.name == "MainActivity"
             }.assertTrue { file ->
                 file.imports.none { it.name.startsWith("$basePackage.data.local.dao.") }
             }
@@ -69,7 +76,7 @@ class ArchitectureKonsistTest {
             .assertTrue { it.resideInPackage("com.breathofcharge.wattif.domain.repository") }
 
         productionScope
-            .classes()
+            .classesAndObjects()
             .withNameEndingWith("Repository")
             .assertTrue { it.resideInPackage("com.breathofcharge.wattif.data.repository") }
     }
@@ -77,7 +84,7 @@ class ArchitectureKonsistTest {
     @Test
     fun `room declarations reside in local data packages`() {
         productionScope
-            .interfaces()
+            .classesAndInterfaces()
             .withNameEndingWith("Dao")
             .assertTrue { it.resideInPackage("com.breathofcharge.wattif.data.local.dao") }
 
