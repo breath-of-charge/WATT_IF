@@ -129,6 +129,18 @@ class ArchitectureKonsistTest {
                 forbiddenPrefixes = forbiddenUiDependencies,
             ),
         )
+        assert(
+            containsForbiddenDependencyReference(
+                source = "val label = \"\${$basePackage.data.local.entity.CampingSessionEntity.STATUS_ACTIVE}\"",
+                forbiddenPrefixes = forbiddenUiDependencies,
+            ),
+        )
+        assert(
+            !containsForbiddenDependencyReference(
+                source = "val label = \"\${listOf(\"$basePackage.data.repository\")}\"",
+                forbiddenPrefixes = forbiddenUiDependencies,
+            ),
+        )
     }
 }
 
@@ -148,6 +160,7 @@ private fun stripCommentsAndStrings(source: String): String {
     var inLineComment = false
     var stringDelimiter: String? = null
     var inCharacter = false
+    val interpolationDepths = mutableListOf<Int>()
 
     while (index < source.length) {
         when {
@@ -182,6 +195,11 @@ private fun stripCommentsAndStrings(source: String): String {
                 if (source.startsWith(stringDelimiter, index)) {
                     output.append(" ".repeat(stringDelimiter.length))
                     index += stringDelimiter.length
+                    stringDelimiter = null
+                } else if (source.startsWith("\${", index)) {
+                    output.append("  ")
+                    index += 2
+                    interpolationDepths.add(1)
                     stringDelimiter = null
                 } else if (stringDelimiter == "\"" && source[index] == '\\') {
                     output.append("  ")
@@ -224,6 +242,22 @@ private fun stripCommentsAndStrings(source: String): String {
             source[index] == '\'' -> {
                 inCharacter = true
                 output.append(' ')
+                index++
+            }
+            interpolationDepths.isNotEmpty() && source[index] == '{' -> {
+                interpolationDepths[interpolationDepths.lastIndex]++
+                output.append(source[index++])
+            }
+            interpolationDepths.isNotEmpty() && source[index] == '}' -> {
+                val lastInterpolation = interpolationDepths.lastIndex
+                interpolationDepths[lastInterpolation]--
+                if (interpolationDepths[lastInterpolation] == 0) {
+                    interpolationDepths.removeAt(lastInterpolation)
+                    output.append(' ')
+                    stringDelimiter = "\""
+                } else {
+                    output.append(source[index])
+                }
                 index++
             }
             else -> {
