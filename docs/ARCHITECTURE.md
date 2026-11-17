@@ -9,7 +9,20 @@
 - `data/navigation`: NaviHelper SDK의 목적지·경로·예상 이동거리 접근
 - `data/remote`: 향후 날씨 등 외부 데이터 연동
 - `domain`: 배터리 예산, 보호 기준, 캠핑 시작·종료 및 통계 규칙
-- `feature`: 시작, 프리셋, 야간 대시보드, 종료 점검, 기록·리포트 화면
+- `ui`: 시작, 프리셋, 야간 대시보드, 종료 점검, 기록·리포트 화면과 화면별 ViewModel
+
+현재 저장소는 단일 `app` 모듈을 사용한다. 화면은 `ui/<기능>` 패키지에 두며 `feature` 모듈이나 패키지는 사용하지 않는다. 화면은 domain 모델·Repository 인터페이스를 통해 데이터를 요청하고, `data/repository` 구현체가 Room·차량·내비게이션 데이터 소스와 domain 사이를 연결한다. `MainActivity`는 앱 진입점으로서 구현체를 구성해 UI에 전달한다.
+
+허용하는 의존성 방향은 다음과 같다.
+
+```text
+MainActivity → ui, data
+ui → domain
+data → domain
+domain → (프로젝트 내부 계층 의존성 없음)
+```
+
+`ui`와 `domain`은 `data` 구현 세부사항에 직접 의존하지 않는다. Room DAO는 데이터 구현 내부에서만 사용하며, ViewModel과 Composable에서 직접 참조하지 않는다. 패키지 배치 및 이 의존성 방향은 `ArchitectureKonsistTest`가 검증하고 Android CI에서 실행한다.
 
 ## 데이터 방향
 
@@ -26,3 +39,5 @@
 3. SDK 접근용 인터페이스와 테스트 대역 정의
 4. 캠핑 세션 상태 머신과 배터리 예산 규칙 구현
 5. Compose 화면과 ViewModel 연결
+
+구현 계획은 현재 코드 상태를 설명하는 문서가 아니다. Pleos SDK 연동과 추가 기능은 공식 API 지원 범위·권한·차량 capability를 확인한 뒤 진행한다.

@@ -40,6 +40,9 @@ jobs:
       - name: Run Android Lint
         run: ./gradlew :app:lintDebug
 
+      - name: Verify architecture conventions
+        run: ./gradlew :app:testDebugUnitTest --tests '*ArchitectureKonsistTest'
+
       - name: Run unit tests
         run: ./gradlew :app:testDebugUnitTest
 

@@ -51,7 +51,7 @@ reviews:
   # main 브랜치를 대상으로 하는 PR 자동 리뷰
   base_branches:
     - "main"
-    
+
   # 실제 코드와 변경된 설정·문서만 리뷰
   path_filters:
     # Android 앱 코드

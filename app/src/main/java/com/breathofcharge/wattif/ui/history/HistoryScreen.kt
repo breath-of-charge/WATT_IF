@@ -22,9 +22,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.breathofcharge.wattif.ui.model.CampingRecord
 import com.breathofcharge.wattif.ui.model.sampleRecords
+import com.breathofcharge.wattif.ui.theme.WattIfTheme
 
 @Composable
 fun HistoryScreen(
@@ -134,5 +136,13 @@ private fun HistoryRow(
             Text(record.duration, style = MaterialTheme.typography.titleMedium)
             Text(record.batteryChange, style = MaterialTheme.typography.titleLarge)
         }
+    }
+}
+
+@Preview(widthDp = 1280, heightDp = 720)
+@Composable
+private fun HistoryScreenPreview() {
+    WattIfTheme {
+        HistoryScreen(onRecordClick = {})
     }
 }
