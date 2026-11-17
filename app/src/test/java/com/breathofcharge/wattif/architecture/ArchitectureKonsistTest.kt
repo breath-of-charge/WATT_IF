@@ -35,10 +35,10 @@ class ArchitectureKonsistTest {
                 file.imports.none { import ->
                     forbiddenUiDependencies.any(import.name::startsWith)
                 } &&
-                    file.text
-                        .lineSequence()
-                        .filterNot { it.trimStart().startsWith("import ") || it.trimStart().startsWith("package ") }
-                        .none { line -> forbiddenUiDependencies.any(line::contains) }
+                    !containsForbiddenDependencyReference(
+                        source = file.text,
+                        forbiddenPrefixes = forbiddenUiDependencies,
+                    )
             }
 
         productionScope.files
@@ -112,4 +112,126 @@ class ArchitectureKonsistTest {
                 file.functions().any { it.hasAnnotationWithName("Preview") }
             }
     }
+
+    @Test
+    fun `fully qualified dependency check ignores comments and strings`() {
+        val source =
+            """
+            package $basePackage.ui.main
+            // $basePackage.data.repository is mentioned in documentation.
+            val label = "$basePackage.data.repository"
+            """.trimIndent()
+
+        assert(!containsForbiddenDependencyReference(source, forbiddenUiDependencies))
+        assert(
+            containsForbiddenDependencyReference(
+                source = "val repository = $basePackage.data.repository.Repository()",
+                forbiddenPrefixes = forbiddenUiDependencies,
+            ),
+        )
+    }
+}
+
+private fun containsForbiddenDependencyReference(
+    source: String,
+    forbiddenPrefixes: List<String>,
+): Boolean =
+    stripCommentsAndStrings(source)
+        .lineSequence()
+        .filterNot { it.trimStart().startsWith("package ") || it.trimStart().startsWith("import ") }
+        .any { line -> forbiddenPrefixes.any(line::contains) }
+
+private fun stripCommentsAndStrings(source: String): String {
+    val output = StringBuilder(source.length)
+    var index = 0
+    var blockCommentDepth = 0
+    var inLineComment = false
+    var stringDelimiter: String? = null
+    var inCharacter = false
+
+    while (index < source.length) {
+        when {
+            inLineComment -> {
+                if (source[index] == '\n') {
+                    inLineComment = false
+                    output.append('\n')
+                } else {
+                    output.append(' ')
+                }
+                index++
+            }
+            blockCommentDepth > 0 -> {
+                when {
+                    source.startsWith("/*", index) -> {
+                        blockCommentDepth++
+                        output.append("  ")
+                        index += 2
+                    }
+                    source.startsWith("*/", index) -> {
+                        blockCommentDepth--
+                        output.append("  ")
+                        index += 2
+                    }
+                    else -> {
+                        output.append(if (source[index] == '\n') '\n' else ' ')
+                        index++
+                    }
+                }
+            }
+            stringDelimiter != null -> {
+                if (source.startsWith(stringDelimiter, index)) {
+                    output.append(" ".repeat(stringDelimiter.length))
+                    index += stringDelimiter.length
+                    stringDelimiter = null
+                } else if (stringDelimiter == "\"" && source[index] == '\\') {
+                    output.append("  ")
+                    index += 2
+                } else {
+                    output.append(if (source[index] == '\n') '\n' else ' ')
+                    index++
+                }
+            }
+            inCharacter -> {
+                if (source[index] == '\\') {
+                    output.append("  ")
+                    index += 2
+                } else {
+                    if (source[index] == '\'') inCharacter = false
+                    output.append(' ')
+                    index++
+                }
+            }
+            source.startsWith("//", index) -> {
+                inLineComment = true
+                output.append("  ")
+                index += 2
+            }
+            source.startsWith("/*", index) -> {
+                blockCommentDepth = 1
+                output.append("  ")
+                index += 2
+            }
+            source.startsWith("\"\"\"", index) -> {
+                stringDelimiter = "\"\"\""
+                output.append("   ")
+                index += 3
+            }
+            source[index] == '"' -> {
+                stringDelimiter = "\""
+                output.append(' ')
+                index++
+            }
+            source[index] == '\'' -> {
+                inCharacter = true
+                output.append(' ')
+                index++
+            }
+            else -> {
+                output.append(source[index])
+                index++
+            }
+        }
+    }
+
+    return output.toString()
 }
