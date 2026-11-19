@@ -85,5 +85,6 @@ Vehicle SDK와 NaviHelper SDK는 Pleos 개발자 콘솔에서 앱 프로젝트�
 
 ## 개발 문서
 
-- [개발 및 협업 컨벤션](CONVENTION.md)
-- [Pleos 차량용 앱 개발 가이드](PLEOS_GUIDE.md)
+- [개발 및 협업 컨벤션](docs/CONVENTION.md)
+- [Pleos 차량용 앱 개발 가이드](docs/PLEOS_GUIDE.md)
+- [초기 아키텍처](docs/ARCHITECTURE.md)
