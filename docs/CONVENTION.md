@@ -11,11 +11,12 @@
 | UI | Jetpack Compose, Material 3 | 화면 상태는 StateFlow로 관리 |
 | 구조 | 단일 모듈, MVVM + Repository | 복잡하거나 재사용되는 계산만 domain으로 분리 |
 | 로컬 데이터 | Room 2.8.5, SQLite, KSP, Flow | Entity·DAO·Repository 역할 분리 |
+| 백엔드 연동 | 아직 연동되지 않음 | 팀 백엔드 API 명세 확정 후 `data/remote`에서 연동 |
 | 비동기 | Kotlin Coroutines, Flow·StateFlow | 생명주기를 고려해 수집 |
 | 품질 | ktlint, Android Lint, Konsist, GitHub Actions | CodeRabbit은 GitHub App으로 별도 연결 |
 | 차량·내비게이션 | 아직 연동되지 않음 | Pleos Vehicle SDK, NaviHelper SDK 연동 예정 |
 
-별도 백엔드 서버 없이 Android 앱 내부에서 UI, 비즈니스 로직과 로컬 데이터베이스를 관리한다. SDK 의존성이나 차량 권한은 실제 사용 범위가 확정될 때 추가한다.
+현재 팀 백엔드 API는 연동되지 않았으며, 명세가 확정되면 Android 앱의 `data/remote` 계층에서 연결한다. 앱의 UI 상태와 로컬 데이터는 앱 내부에서 관리한다. SDK 의존성, 차량 권한과 백엔드 클라이언트 의존성은 실제 사용 범위가 확정될 때 추가한다.
 
 ## 아키텍처
 
@@ -26,11 +27,13 @@ ViewModel
         ↓
 Repository
         ↓
-Room DB / Vehicle SDK
+Room DB / Backend API / Vehicle SDK / NaviHelper SDK
 ```
 
 - UI와 데이터 접근 로직을 분리하고 ViewModel에서 화면 상태를 관리한다.
+- UI는 백엔드 API, Room DAO와 차량 SDK를 직접 호출하지 않는다.
 - Room DAO는 Repository를 통해서만 접근한다.
+- 백엔드 요청과 응답은 `data/remote`에서 처리하고 Repository를 통해 domain 모델로 변환한다.
 - 복잡하거나 재사용되는 계산은 `domain`으로 분리하고 UseCase는 필요할 때만 만든다.
 - SDK 연동 전에는 출처가 명확한 Mock 데이터를 사용하며, 실제 데이터와 혼동되지 않게 표시한다.
 - 차량 SDK 접근과 오류 처리는 UI에서 분리한다.
@@ -62,7 +65,7 @@ Room DB / Vehicle SDK
 - 주요 화면과 공통 컴포넌트에는 `@Preview`를 작성한다.
 - 단순 UI 상태는 `remember` 또는 `rememberSaveable`, 화면 단위 상태는 `StateFlow`를 사용한다.
 - 필요한 화면은 Loading / Success / Error 상태를 구분한다.
-- Composable에서 DB나 차량 SDK에 직접 접근하지 않는다.
+- Composable에서 백엔드 API, DB나 차량 SDK에 직접 접근하지 않는다.
 - Preview에는 정적 샘플 상태를 주입한다. SDK 객체 생성, 실제 차량 API 호출, DB 연결을 하지 않는다.
 
 ## Room DB
@@ -80,27 +83,32 @@ Room DB / Vehicle SDK
 ```text
 app/src/main/java/com/breathofcharge/wattif/
 ├── ui/
-│   ├── home/
-│   ├── camping/
-│   ├── battery/
-│   ├── checklist/
-│   ├── history/
-│   ├── components/
+│   ├── <screen>/
+│   │   ├── <Screen>Screen.kt
+│   │   ├── <Screen>ViewModel.kt    # 화면 상태 관리와 Repository 호출
+│   │   ├── <Screen>UiState.kt      # 화면에 표시할 상태 정의
+│   │   └── components/             # 해당 화면에서만 사용하는 UI
+│   ├── components/                  # 여러 화면에서 재사용하는 공통 UI
 │   ├── navigation/
-│   └── theme/
+│   └── theme/                       # 디자인 시스템 토큰
 ├── domain/
-│   └── model/
+│   ├── model/                       # 데이터 출처와 무관한 앱 모델
+│   └── repository/                  # Repository 인터페이스
 ├── data/
 │   ├── local/
 │   │   ├── dao/
 │   │   └── entity/
-│   ├── repository/
-│   └── vehicle/
+│   ├── remote/
+│   │   ├── api/                     # 백엔드 엔드포인트
+│   │   ├── dto/                     # API 요청·응답 모델
+│   │   └── datasource/              # API 호출과 오류 처리
+│   ├── repository/                  # Repository 구현체
+│   ├── vehicle/                     # Vehicle SDK 연동
+│   └── navigation/                  # NaviHelper SDK 연동
 └── MainActivity.kt
 ```
 
-- 기능별 Screen과 ViewModel은 같은 기능 폴더에 둔다.
-- 공통 UI는 `ui/components`, 차량 SDK 접근은 `data/vehicle`에 둔다.
+- API 키와 인증 정보는 소스 코드에 작성하거나 Git에 커밋하지 않는다.
 - 기존 패키지명은 임의로 변경하지 않는다.
 
 ## Git 브랜치 전략
