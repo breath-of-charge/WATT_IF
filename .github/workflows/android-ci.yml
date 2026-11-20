@@ -32,7 +32,8 @@ jobs:
         uses: gradle/actions/setup-gradle@v6
 
       - name: Ensure Android SDK Platform 34
-        run: "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-34"
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "platforms;android-34"
 
       - name: Check Kotlin formatting
         run: ./gradlew ktlintCheck

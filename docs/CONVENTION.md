@@ -108,7 +108,6 @@ app/src/main/java/com/breathofcharge/wattif/
 | 브랜치 | 용도 |
 |---|---|
 | `main` | 안정적인 제출 버전 |
-| `dev` | 개발 통합 브랜치 |
 | `init/` | 초기 설정 |
 | `feat/` | 기능 구현 |
 | `fix/` | 버그 수정 |
@@ -117,7 +116,7 @@ app/src/main/java/com/breathofcharge/wattif/
 | `ci/` | 자동화 |
 | `docs/` | 문서 |
 
-브랜치는 최신 `dev`에서 분기하고 PR로 `dev`에 병합한다. `dev`를 운영하지 않는 기간에는 `main`을 기준으로 사용한다. 이름은 `type/이슈번호-기능명` 형식이며 기능명은 kebab-case를 사용한다.
+브랜치는 최신 `main`에서 분기하고 PR로 `main`에 병합한다. 이름은 `type/이슈번호-기능명` 형식이며 기능명은 kebab-case를 사용한다.
 
 - `init/1-project-setup`
 - `feat/12-battery-screen`
@@ -139,7 +138,7 @@ Issue Form의 `브랜치 기능명`을 영문 kebab-case로 작성하고 담당�
 
 제목은 `[Type] 작업 내용` 형식으로 작성한다. 예: `[Init] 프로젝트 초기 설정`.
 
-- 하나의 PR에는 가능한 한 하나의 기능을 포함하고 대상 브랜치는 `dev`로 한다.
+- 하나의 PR에는 가능한 한 하나의 기능을 포함하고 대상 브랜치는 `main`으로 한다.
 - 관련 Issue를 연결하고 UI 작업에는 스크린샷을 첨부한다.
 - GitHub Actions 통과와 CodeRabbit 의견을 확인한 뒤 Squash merge하고 작업 브랜치를 삭제한다.
 - 별도의 팀원 리뷰 승인 절차는 두지 않는다.
